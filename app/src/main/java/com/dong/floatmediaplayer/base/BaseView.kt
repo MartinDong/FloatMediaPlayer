@@ -7,4 +7,6 @@ interface BaseView {
     fun hideLoading()
 
     fun onError(throwable: Throwable)
+
+    fun onSuccess(message: Any)
 }

@@ -1,7 +1,7 @@
 package com.dong.floatmediaplayer.base
 
-interface BasePresenter<V : BaseView> {
-    var mView: V?
+open class BasePresenter<V : BaseView> {
+    var mView: V? = null
 
     fun attachView(view: V) {
         mView = view
@@ -14,4 +14,5 @@ interface BasePresenter<V : BaseView> {
     fun isViewAttached(): Boolean {
         return mView != null
     }
+
 }

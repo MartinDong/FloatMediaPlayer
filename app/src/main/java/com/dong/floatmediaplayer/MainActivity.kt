@@ -1,7 +1,6 @@
 package com.dong.floatmediaplayer
 
 import android.content.Intent
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.dong.floatmediaplayer.base.BaseActivity
@@ -9,10 +8,11 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
+    override fun getLayoutId(): Int {
+        return R.layout.activity_main
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun initView() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
