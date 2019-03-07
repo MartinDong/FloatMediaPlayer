@@ -4,6 +4,7 @@ import com.dong.floatmediaplayer.base.BasePresenter
 import com.dong.floatmediaplayer.bean.wangyi.SongListResponse
 import com.dong.floatmediaplayer.contract.SongHiBaiListContract
 import com.dong.floatmediaplayer.model.SongHiBaiListModel
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
@@ -25,7 +26,7 @@ class SongHiBaiListPresenter() :
             //create方法中多了一个BackpressureStrategy类型的参数
             //为上下游分别指定各自的线程
             ?.subscribeOn(Schedulers.newThread())
-            ?.observeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(
                 object : Subscriber<SongListResponse> {
                     //onSubscribe回调的参数不是Disposable而是Subscription
