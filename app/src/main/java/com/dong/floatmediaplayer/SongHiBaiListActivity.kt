@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_song_hi_bai_list.*
 
 class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiBaiListContract.View {
 
+
     lateinit var mSongListAdapter: SongHiBaiListAdapter
     private var mSongList: MutableList<Song> = mutableListOf()
 
@@ -22,7 +23,15 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
 
     @SuppressLint("WrongConstant")
     override fun initView() {
-        mSongListAdapter = SongHiBaiListAdapter(mSongList)
+        mSongListAdapter = SongHiBaiListAdapter(mSongList, object : SongHiBaiListAdapter.OperationListener {
+            override fun playSong(song: Song) {
+                onPlaySong(song)
+            }
+
+            override fun pauseSong(song: Song) {
+                pauseSong(song)
+            }
+        })
 
         val layoutManager = LinearLayoutManager(this, VERTICAL, false)
 
@@ -35,7 +44,11 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
     }
 
     override fun onPlaySong(song: Song) {
-        println("=======onPlaySong========")
+        println("=======onPlaySong========$song")
+    }
+
+    override fun pauseSong(song: Song) {
+        println("=======pauseSong========$song")
     }
 
     override fun showLoading() {

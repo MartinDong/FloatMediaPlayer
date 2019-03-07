@@ -12,6 +12,7 @@ interface SongHiBaiListContract {
 
     interface View : BaseView {
         fun onPlaySong(song: Song)
+        fun pauseSong(song: Song)
     }
 
     interface Presenter {

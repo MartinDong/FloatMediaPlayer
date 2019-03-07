@@ -10,7 +10,7 @@ import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
 
 
-class SongHiBaiListPresenter() :
+class SongHiBaiListPresenter :
     BasePresenter<SongHiBaiListContract.View>(),
     SongHiBaiListContract.Presenter {
 
