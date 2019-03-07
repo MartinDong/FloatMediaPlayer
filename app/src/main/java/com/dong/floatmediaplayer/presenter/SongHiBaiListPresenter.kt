@@ -1,7 +1,7 @@
 package com.dong.floatmediaplayer.presenter
 
 import com.dong.floatmediaplayer.base.BasePresenter
-import com.dong.floatmediaplayer.bean.SongHiBaiResponse
+import com.dong.floatmediaplayer.bean.wangyi.SongListResponse
 import com.dong.floatmediaplayer.contract.SongHiBaiListContract
 import com.dong.floatmediaplayer.model.SongHiBaiListModel
 import io.reactivex.schedulers.Schedulers
@@ -27,14 +27,14 @@ class SongHiBaiListPresenter() :
             ?.subscribeOn(Schedulers.newThread())
             ?.observeOn(Schedulers.newThread())
             ?.subscribe(
-                object : Subscriber<SongHiBaiResponse> {
+                object : Subscriber<SongListResponse> {
                     //onSubscribe回调的参数不是Disposable而是Subscription
                     override fun onSubscribe(s: Subscription) {
                         //注意此处，暂时先这么设置
                         s.request(java.lang.Long.MAX_VALUE)
                     }
 
-                    override fun onNext(response: SongHiBaiResponse?) {
+                    override fun onNext(response: SongListResponse?) {
                         println("接收----> " + response!!)
                         mView?.onSuccess(response)
                     }
