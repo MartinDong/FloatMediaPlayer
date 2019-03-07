@@ -10,12 +10,15 @@ import com.dong.floatmediaplayer.bean.wangyi.SongListResponse
 import com.dong.floatmediaplayer.contract.SongHiBaiListContract
 import com.dong.floatmediaplayer.presenter.SongHiBaiListPresenter
 import kotlinx.android.synthetic.main.activity_song_hi_bai_list.*
+import android.media.MediaPlayer
+
 
 class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiBaiListContract.View {
 
 
     lateinit var mSongListAdapter: SongHiBaiListAdapter
     private var mSongList: MutableList<Song> = mutableListOf()
+    private val mMediaPlayer = MediaPlayer()
 
     override fun getLayoutId(): Int {
         return R.layout.activity_song_hi_bai_list
@@ -45,6 +48,13 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
 
     override fun onPlaySong(song: Song) {
         println("=======onPlaySong========$song")
+        if (mMediaPlayer.isPlaying) {
+            mMediaPlayer.reset()
+        }
+
+        mMediaPlayer.setDataSource(song.url)
+        mMediaPlayer.prepare()
+        mMediaPlayer.start()
     }
 
     override fun pauseSong(song: Song) {
