@@ -4,21 +4,21 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dong.floatmediaplayer.R
 import com.dong.floatmediaplayer.bean.wangyi.Song
 
-class SongHiBaiListAdapter(private var songList: List<Song>, private var operationListener: OperationListener) : RecyclerView.Adapter<SongHiBaiListAdapter.SongHiBaiHV>() {
+class SongHiBaiListAdapter(private var songList: List<Song>, private var operationListener: OperationListener) :
+    RecyclerView.Adapter<SongHiBaiListAdapter.SongHiBaiHV>() {
 
     @SuppressLint("InflateParams")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongHiBaiHV {
         return SongHiBaiHV(
-                LayoutInflater
-                        .from(parent.context)
-                        .inflate(R.layout.item_song_hi_bai_list, parent, false),
-                operationListener
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.item_song_hi_bai_list, parent, false),
+            operationListener
         )
     }
 
@@ -34,12 +34,13 @@ class SongHiBaiListAdapter(private var songList: List<Song>, private var operati
         holder.initViewDate(songList[position])
     }
 
-    class SongHiBaiHV(itemView: View, private var operationListener: OperationListener) : RecyclerView.ViewHolder(itemView) {
+    class SongHiBaiHV(itemView: View, private var operationListener: OperationListener) :
+        RecyclerView.ViewHolder(itemView) {
         fun initViewDate(song: Song) {
             itemView.findViewById<TextView>(R.id.tv_song_name).text = song.name
             itemView.findViewById<TextView>(R.id.tv_song_singer).text = song.singer
 
-            itemView.findViewById<RelativeLayout>(R.id.rl_song_operation).setOnClickListener {
+            itemView.setOnClickListener {
                 operationListener.playSong(song)
             }
         }

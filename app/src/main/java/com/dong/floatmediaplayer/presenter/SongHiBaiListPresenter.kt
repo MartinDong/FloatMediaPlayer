@@ -36,14 +36,14 @@ class SongHiBaiListPresenter :
                     }
 
                     override fun onNext(response: SongListResponse?) {
-                        println("接收----> " + response!!)
+                        println("------接收------" + response!!)
                         mView?.onSuccess(response)
                     }
 
                     override fun onError(t: Throwable) {}
 
                     override fun onComplete() {
-                        println("接收----> 完成")
+                        println("------接收------完成")
                     }
                 })
     }
