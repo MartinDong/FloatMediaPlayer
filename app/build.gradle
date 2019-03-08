@@ -41,6 +41,9 @@ dependencies {
     //rxjava2
     implementation "io.reactivex.rxjava2:rxjava:2.1.12"
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'

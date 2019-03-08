@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dong.floatmediaplayer.R
 import com.dong.floatmediaplayer.bean.wangyi.Song
 
@@ -39,6 +41,11 @@ class SongHiBaiListAdapter(private var songList: List<Song>, private var operati
         fun initViewDate(song: Song) {
             itemView.findViewById<TextView>(R.id.tv_song_name).text = song.name
             itemView.findViewById<TextView>(R.id.tv_song_singer).text = song.singer
+            Glide
+                .with(itemView)
+                .load(song.pic)
+                .centerCrop()
+                .into(itemView.findViewById(R.id.iv_song_pic))
 
             itemView.setOnClickListener {
                 operationListener.playSong(song)
