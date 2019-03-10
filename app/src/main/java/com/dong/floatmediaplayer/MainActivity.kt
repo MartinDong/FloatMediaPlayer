@@ -13,7 +13,9 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initView() {
-        setSupportActionBar(toolbar)
+        drag_float_view.setOnClickListener {
+            println("===drag_float_view===")
+        }
 
         fab.setOnClickListener { view ->
 

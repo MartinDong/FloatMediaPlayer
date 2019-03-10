@@ -28,7 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".SongHiBaiListActivity">
+        <activity android:name=".SongHiBaiListActivity"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

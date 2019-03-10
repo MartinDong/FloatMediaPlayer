@@ -6,7 +6,7 @@
 - 仿照 Glide 编写的图片加载库
 
 
-#### 主动请求音频控制焦点，暂停其他的多媒体播放
+##### 主动请求音频控制焦点，暂停其ta的多媒体播放
 ```kotlin
 private var mAudioManager: AudioManager? = null
 
@@ -17,7 +17,7 @@ mAudioManager!!.requestAudioFocus(
                 )
 ```
 
-#### 监听音频焦点改变，控制当前的播放器暂停
+##### 监听音频焦点改变，控制当前的播放器暂停
 ```kotlin
 private var mAudioFocusListener: AudioManager.OnAudioFocusChangeListener? = null
 
