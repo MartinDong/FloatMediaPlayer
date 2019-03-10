@@ -15,7 +15,7 @@ class SongPlayerService : Service() {
 
     private var mSongList: MutableList<Song>? = null
     private var mCurrentSong: Song? = null
-    private var mCurrentPlaySongIndex = 0
+    private var mCurrentPlaySongIndex = -1
 
     private var mMediaPlayer: MediaPlayer? = null
     private var mAudioManager: AudioManager? = null

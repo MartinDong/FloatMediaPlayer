@@ -3,7 +3,7 @@ package com.dong.floatmediaplayer.base
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
+import com.dong.floatmediaplayer.R
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -19,8 +19,12 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun startFragment(@IdRes containerViewId: Int, fragment: BaseFragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        //设置专场动画
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        transaction.setCustomAnimations(
+            R.anim.in_from_right,
+            R.anim.in_from_right,
+            R.anim.in_from_right,
+            R.anim.out_to_left
+        )
         transaction.replace(containerViewId, fragment)
         transaction.addToBackStack(fragment.javaClass.name)
         transaction.commit()
