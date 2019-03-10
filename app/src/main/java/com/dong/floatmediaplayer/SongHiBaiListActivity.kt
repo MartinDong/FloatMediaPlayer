@@ -31,6 +31,7 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
 
     @SuppressLint("WrongConstant")
     override fun initView() {
+        println("------initView------")
         mSongListAdapter = SongHiBaiListAdapter(mSongList, object : SongHiBaiListAdapter.OperationListener {
             override fun playSong(song: Song) {
                 onPlaySong(song)
@@ -60,6 +61,14 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
         val songServiceIntent = Intent(this, SongPlayerService::class.java)
         startService(songServiceIntent)
         bindService(songServiceIntent, mSongServiceConnection!!, BIND_AUTO_CREATE)
+    }
+
+    override fun onDestroy() {
+        println("------onDestroy------")
+        super.onDestroy()
+        if (mSongServiceConnection != null) {
+            unbindService(mSongServiceConnection!!)
+        }
     }
 
     override fun onPlaySong(song: Song) {
@@ -94,10 +103,11 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
 
     inner class SongServiceConnection : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            println("------onServiceDisconnected------$name")
         }
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            println("------onServiceConnected------$name")
             mSongBinder = service as SongPlayerService.SongBinder
             mSongBinder!!.initSongList(mSongList)
         }
