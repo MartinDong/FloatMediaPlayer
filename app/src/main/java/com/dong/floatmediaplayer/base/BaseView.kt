@@ -8,5 +8,4 @@ interface BaseView {
 
     fun onError(throwable: Throwable)
 
-    fun onSuccess(message: Any)
 }

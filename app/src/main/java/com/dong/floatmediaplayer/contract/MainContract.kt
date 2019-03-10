@@ -2,18 +2,15 @@ package com.dong.floatmediaplayer.contract
 
 import com.dong.floatmediaplayer.base.BaseView
 import com.dong.floatmediaplayer.bean.wangyi.Song
-import com.dong.floatmediaplayer.bean.wangyi.SongListResponse
-import io.reactivex.Flowable
 
-interface SongHiBaiListContract {
+interface MainContract {
     interface Model {
-        fun getSongList(): Flowable<SongListResponse>?
+
     }
 
     interface View : BaseView {
         fun onPlaySong(song: Song)
         fun pauseSong(song: Song)
-        fun onSuccess(message: Any)
     }
 
     interface Presenter {

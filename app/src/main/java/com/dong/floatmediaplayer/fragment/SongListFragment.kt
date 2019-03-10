@@ -1,14 +1,15 @@
-package com.dong.floatmediaplayer
+package com.dong.floatmediaplayer.fragment
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
+import com.dong.floatmediaplayer.R
 import com.dong.floatmediaplayer.adapter.SongHiBaiListAdapter
-import com.dong.floatmediaplayer.base.BaseMvpActivity
+import com.dong.floatmediaplayer.base.BaseMvpFragment
 import com.dong.floatmediaplayer.bean.wangyi.Song
 import com.dong.floatmediaplayer.bean.wangyi.SongListResponse
 import com.dong.floatmediaplayer.contract.SongHiBaiListContract
@@ -16,9 +17,7 @@ import com.dong.floatmediaplayer.presenter.SongHiBaiListPresenter
 import com.dong.floatmediaplayer.service.SongPlayerService
 import kotlinx.android.synthetic.main.activity_song_hi_bai_list.*
 
-
-class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiBaiListContract.View {
-
+class SongListFragment : BaseMvpFragment<SongHiBaiListPresenter>(), SongHiBaiListContract.View {
 
     private lateinit var mSongListAdapter: SongHiBaiListAdapter
     private var mSongList: MutableList<Song> = mutableListOf()
@@ -42,7 +41,7 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
             }
         })
 
-        val layoutManager = LinearLayoutManager(this, VERTICAL, false)
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         rv_song_list.adapter = mSongListAdapter
         rv_song_list.layoutManager = layoutManager
@@ -52,9 +51,9 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
         mPresenter!!.getSongList()
 
         mSongServiceConnection = SongServiceConnection()
-        val songServiceIntent = Intent(this, SongPlayerService::class.java)
+        val songServiceIntent = Intent(context, SongPlayerService::class.java)
         startService(songServiceIntent)
-        bindService(songServiceIntent, mSongServiceConnection!!, BIND_AUTO_CREATE)
+        bindService(songServiceIntent, mSongServiceConnection!!, AppCompatActivity.BIND_AUTO_CREATE)
     }
 
     override fun onDestroy() {
@@ -105,6 +104,6 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
             mSongBinder = service as SongPlayerService.SongBinder
             mSongBinder!!.initSongList(mSongList)
         }
-
     }
+
 }

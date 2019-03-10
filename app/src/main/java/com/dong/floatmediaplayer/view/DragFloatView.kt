@@ -4,11 +4,11 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.widget.RelativeLayout
 
-class DragFloatView : View {
+class DragFloatView : RelativeLayout {
 
     private var parentHeight: Int = 0
     private var parentWidth: Int = 0

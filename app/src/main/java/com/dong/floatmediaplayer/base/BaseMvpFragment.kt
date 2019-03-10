@@ -1,12 +1,12 @@
 package com.dong.floatmediaplayer.base
 
-abstract class BaseMvpActivity<T : BasePresenter<*>> : BaseActivity(), BaseView {
+abstract class BaseMvpFragment<T : BasePresenter<*>> : BaseFragment(), BaseView {
     protected var mPresenter: T? = null
 
-    override fun onDestroy() {
+    override fun onDetach() {
         if (mPresenter != null) {
             mPresenter!!.detachView()
         }
-        super.onDestroy()
+        super.onDetach()
     }
 }
