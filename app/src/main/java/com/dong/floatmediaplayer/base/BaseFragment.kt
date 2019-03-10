@@ -5,17 +5,18 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 
-abstract class BaseFragment : Fragment() {
-    protected var mActivity: FragmentActivity? = null
+abstract class BaseFragment : Fragment(), View.OnTouchListener {
+    protected var mActivity: BaseActivity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActivity = activity!!
+        mActivity = (activity as BaseActivity?)!!
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -24,7 +25,12 @@ abstract class BaseFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        view?.setOnTouchListener(this)
         initView()
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        return true
     }
 
     fun startService(service: Intent): ComponentName? {
@@ -32,8 +38,8 @@ abstract class BaseFragment : Fragment() {
     }
 
     fun bindService(
-        service: Intent, conn: ServiceConnection,
-        flags: Int
+            service: Intent, conn: ServiceConnection,
+            flags: Int
     ): Boolean {
         if (mActivity != null) {
             return mActivity!!.bindService(service, conn, flags)
@@ -43,6 +49,10 @@ abstract class BaseFragment : Fragment() {
 
     fun unbindService(conn: ServiceConnection) {
         mActivity?.unbindService(conn)
+    }
+
+    fun startFragment(@IdRes containerViewId: Int, fragment: BaseFragment) {
+        mActivity!!.startFragment(containerViewId, fragment)
     }
 
     abstract fun getLayoutId(): Int

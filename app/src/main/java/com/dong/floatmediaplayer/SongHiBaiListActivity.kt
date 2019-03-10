@@ -33,6 +33,10 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
     override fun initView() {
         println("------initView------")
         mSongListAdapter = SongHiBaiListAdapter(mSongList, object : SongHiBaiListAdapter.OperationListener {
+            override fun jumDetail(song: Song) {
+
+            }
+
             override fun playSong(song: Song) {
                 onPlaySong(song)
             }

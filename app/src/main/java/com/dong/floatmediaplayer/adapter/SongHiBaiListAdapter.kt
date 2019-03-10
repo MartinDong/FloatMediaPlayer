@@ -47,8 +47,11 @@ class SongHiBaiListAdapter(private var songList: List<Song>, private var operati
                 .centerCrop()
                 .into(itemView.findViewById(R.id.iv_song_pic))
 
-            itemView.setOnClickListener {
+            itemView.findViewById<ImageView>(R.id.iv_song_pic).setOnClickListener {
                 operationListener.playSong(song)
+            }
+            itemView.setOnClickListener {
+                operationListener.jumDetail(song)
             }
         }
     }
@@ -56,5 +59,6 @@ class SongHiBaiListAdapter(private var songList: List<Song>, private var operati
     interface OperationListener {
         fun playSong(song: Song)
         fun pauseSong(song: Song)
+        fun jumDetail(song: Song)
     }
 }

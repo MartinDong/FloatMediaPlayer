@@ -12,6 +12,7 @@ class SongDetailListFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetai
     }
 
     override fun initView() {
+        println("SongDetailListFragment=====initView")
     }
 
     override fun showLoading() {

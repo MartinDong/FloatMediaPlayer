@@ -32,6 +32,10 @@ class SongListFragment : BaseMvpFragment<SongHiBaiListPresenter>(), SongHiBaiLis
     override fun initView() {
         println("------initView------")
         mSongListAdapter = SongHiBaiListAdapter(mSongList, object : SongHiBaiListAdapter.OperationListener {
+            override fun jumDetail(song: Song) {
+                startFragment(R.id.content_fragment, SongDetailListFragment())
+            }
+
             override fun playSong(song: Song) {
                 onPlaySong(song)
             }
