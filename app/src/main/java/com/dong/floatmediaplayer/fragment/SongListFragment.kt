@@ -33,7 +33,10 @@ class SongListFragment : BaseMvpFragment<SongHiBaiListPresenter>(), SongHiBaiLis
         println("------initView------")
         mSongListAdapter = SongHiBaiListAdapter(mSongList, object : SongHiBaiListAdapter.OperationListener {
             override fun jumDetail(song: Song) {
-                startFragment(R.id.content_fragment, SongDetailListFragment())
+                val mSongDetailFra = SongDetailFragment()
+                mSongDetailFra.setSong(song)
+
+                startFragment(R.id.content_fragment, mSongDetailFra)
             }
 
             override fun playSong(song: Song) {
@@ -56,7 +59,6 @@ class SongListFragment : BaseMvpFragment<SongHiBaiListPresenter>(), SongHiBaiLis
 
         mSongServiceConnection = SongServiceConnection()
         val songServiceIntent = Intent(context, SongPlayerService::class.java)
-        startService(songServiceIntent)
         bindService(songServiceIntent, mSongServiceConnection!!, AppCompatActivity.BIND_AUTO_CREATE)
     }
 
@@ -70,7 +72,6 @@ class SongListFragment : BaseMvpFragment<SongHiBaiListPresenter>(), SongHiBaiLis
 
     override fun onPlaySong(song: Song) {
         println("------onPlaySong------$song")
-
         if (mSongBinder != null) {
             mSongBinder!!.play(song)
         }

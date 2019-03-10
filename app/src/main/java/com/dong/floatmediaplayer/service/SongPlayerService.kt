@@ -22,6 +22,8 @@ class SongPlayerService : Service() {
     private var mAudioFocusListener: AudioManager.OnAudioFocusChangeListener? = null
     private var mSongBinder: SongBinder? = null
 
+    private var mIsPalying = false
+
     override fun onCreate() {
         println("---初始化音乐播放服务---onCreate")
         super.onCreate()
@@ -73,10 +75,12 @@ class SongPlayerService : Service() {
         }
 
         fun play(song: Song?): Boolean {
-            println("---SongBinder---play--$song")
-            if (mMediaPlayer != null && song != null) {
-                mCurrentPlaySongIndex = getSongIndex(song)
-                val songUrl = song.url
+            mCurrentSong = song
+            println("---SongBinder---play--$mCurrentSong")
+            if (mMediaPlayer != null && mCurrentSong != null) {
+                mIsPalying = true
+                mCurrentPlaySongIndex = getSongIndex(mCurrentSong!!)
+                val songUrl = mCurrentSong!!.url
                 if (!TextUtils.isEmpty(songUrl)) {
                     paueOtherMediaPlayer()
 
@@ -109,6 +113,7 @@ class SongPlayerService : Service() {
 
         fun pause(): Boolean {
             println("---SongBinder---pause--")
+            mIsPalying = false
             return if (mMediaPlayer != null) {
                 if (mMediaPlayer!!.isPlaying) {
                     mMediaPlayer!!.pause()
@@ -122,9 +127,9 @@ class SongPlayerService : Service() {
         private fun paueOtherMediaPlayer() {
             if (mAudioManager != null) {
                 mAudioManager!!.requestAudioFocus(
-                    mAudioFocusListener,
-                    AudioManager.STREAM_MUSIC,
-                    AudioManager.AUDIOFOCUS_GAIN
+                        mAudioFocusListener,
+                        AudioManager.STREAM_MUSIC,
+                        AudioManager.AUDIOFOCUS_GAIN
                 )
             }
         }
@@ -150,6 +155,14 @@ class SongPlayerService : Service() {
                 }
             }
             return songIndex
+        }
+
+        fun getCurrentSong(): Song? {
+            return mCurrentSong
+        }
+
+        fun isPlaying(): Boolean {
+            return mIsPalying
         }
     }
 

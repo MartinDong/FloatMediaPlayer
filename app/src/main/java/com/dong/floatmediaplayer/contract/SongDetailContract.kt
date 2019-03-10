@@ -9,6 +9,8 @@ interface SongDetailContract {
 
     interface View : BaseView {
         fun showSongDetail(song: Song)
+        fun onPlaySong(song: Song)
+        fun pauseSong(song: Song)
     }
 
     interface Presenter {

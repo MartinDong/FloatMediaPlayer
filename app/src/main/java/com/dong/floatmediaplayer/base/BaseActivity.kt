@@ -20,10 +20,10 @@ abstract class BaseActivity : AppCompatActivity() {
     fun startFragment(@IdRes containerViewId: Int, fragment: BaseFragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.setCustomAnimations(
-            R.anim.in_from_right,
-            R.anim.in_from_right,
-            R.anim.in_from_right,
-            R.anim.out_to_left
+                R.anim.in_from_right,
+                R.anim.in_from_right,
+                R.anim.in_from_right,
+                R.anim.out_to_left
         )
         transaction.replace(containerViewId, fragment)
         transaction.addToBackStack(fragment.javaClass.name)

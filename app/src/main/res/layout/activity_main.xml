@@ -22,7 +22,7 @@
         android:id="@+id/drag_float_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:translationY="-250dp"
+        android:translationY="-150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 

@@ -55,6 +55,7 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
         mActivity!!.startFragment(containerViewId, fragment)
     }
 
+
     abstract fun getLayoutId(): Int
 
     abstract fun initView()
