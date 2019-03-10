@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
-    <!-- 静态加载Fragment -->
-    <fragment
-            android:id="@+id/content_fragment"
+    <FrameLayout
+        android:id="@+id/content_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/main_fragment"
             android:name="com.dong.floatmediaplayer.fragment.SongListFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-    />
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
     <com.dong.floatmediaplayer.view.DragFloatView
-            android:id="@+id/drag_float_view"
+        android:id="@+id/drag_float_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationY="-250dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_play_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-    >
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_play_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_media_next"/>
+            app:srcCompat="@android:drawable/ic_media_next" />
     </com.dong.floatmediaplayer.view.DragFloatView>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

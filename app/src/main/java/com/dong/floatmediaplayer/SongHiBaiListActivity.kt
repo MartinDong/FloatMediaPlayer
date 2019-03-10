@@ -14,7 +14,7 @@ import com.dong.floatmediaplayer.bean.wangyi.SongListResponse
 import com.dong.floatmediaplayer.contract.SongHiBaiListContract
 import com.dong.floatmediaplayer.presenter.SongHiBaiListPresenter
 import com.dong.floatmediaplayer.service.SongPlayerService
-import kotlinx.android.synthetic.main.activity_song_hi_bai_list.*
+import kotlinx.android.synthetic.main.fragment_song_list.*
 
 
 class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiBaiListContract.View {
@@ -26,7 +26,7 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
     private var mSongServiceConnection: SongServiceConnection? = null
 
     override fun getLayoutId(): Int {
-        return R.layout.activity_song_hi_bai_list
+        return R.layout.fragment_song_list
     }
 
     @SuppressLint("WrongConstant")
