@@ -1,7 +1,6 @@
 package com.dong.floatmediaplayer
 
 import android.app.Application
-import android.content.Context
 
 class SongApplication : Application() {
 

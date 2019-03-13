@@ -79,11 +79,19 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
                 Toast.makeText(activity, "加载音乐出现问题，请稍候重试", Toast.LENGTH_LONG).show()
             }
         }
+
+        iv_operation_previous.setOnClickListener {
+            playPrevious()
+        }
+
+        iv_operation_next.setOnClickListener {
+            playNext()
+        }
     }
 
-    private fun initSongStatus() {
-        if (mSongBinder != null && mCurrentPlaySong != null) {
-            if (mSong.id == mCurrentPlaySong!!.id) {
+    private fun initSongStatus(song: Song?) {
+        if (mSongBinder != null && song != null) {
+            if (mSong.id == song.id) {
                 if (mSongBinder!!.isPlaying()) {
                     Glide.with(this)
                             .load(R.drawable.widget_pause_selector)
@@ -102,14 +110,24 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
     override fun onPlaySong(song: Song) {
         if (mSongBinder != null) {
             mSongBinder!!.play(song)
-            initSongStatus()
         }
     }
 
     override fun pauseSong(song: Song) {
         if (mSongBinder != null) {
             mSongBinder!!.pause()
-            initSongStatus()
+        }
+    }
+
+    override fun playNext() {
+        if (mSongBinder != null) {
+            mSongBinder!!.playNext()
+        }
+    }
+
+    override fun playPrevious() {
+        if (mSongBinder != null) {
+            mSongBinder!!.playPrevious()
         }
     }
 
@@ -121,8 +139,40 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             println("------onServiceConnected------$name")
             mSongBinder = service as SongPlayerService.SongBinder
+            mSongBinder!!.setCurrentSong(mSong)
+            mSongBinder!!.setMediaStatusChangeListener(object : SongPlayerService.MediaStatusChangeListener {
+                override fun onPlay(song: Song?) {
+                    mCurrentPlaySong = song
+                    initSongStatus(song)
+                    showSongDetail(song!!)
+                }
+
+                override fun onPause(song: Song?) {
+
+                }
+
+                override fun playNext(song: Song?) {
+
+                }
+
+                override fun playPrevious(song: Song?) {
+
+                }
+
+                override fun onContinue(song: Song?) {
+                }
+
+                override fun onProgress(totalDuration: Int, currentDuration: Int) {
+
+                }
+
+                override fun onError(exception: Exception) {
+
+                }
+
+            })
             mCurrentPlaySong = mSongBinder!!.getCurrentSong()
-            initSongStatus()
+            initSongStatus(mCurrentPlaySong)
         }
     }
 

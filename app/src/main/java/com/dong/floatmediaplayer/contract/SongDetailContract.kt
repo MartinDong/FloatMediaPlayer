@@ -11,6 +11,8 @@ interface SongDetailContract {
         fun showSongDetail(song: Song)
         fun onPlaySong(song: Song)
         fun pauseSong(song: Song)
+        fun playNext()
+        fun playPrevious()
     }
 
     interface Presenter {

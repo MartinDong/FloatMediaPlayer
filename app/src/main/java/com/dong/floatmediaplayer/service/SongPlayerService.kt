@@ -22,7 +22,9 @@ class SongPlayerService : Service() {
     private var mAudioFocusListener: AudioManager.OnAudioFocusChangeListener? = null
     private var mSongBinder: SongBinder? = null
 
-    private var mIsPalying = false
+    private var mIsPlaying = false
+
+    private var mMediaStatusChangeListener: MediaStatusChangeListener? = null
 
     override fun onCreate() {
         println("---初始化音乐播放服务---onCreate")
@@ -74,15 +76,20 @@ class SongPlayerService : Service() {
             mSongList = songList
         }
 
+        fun setMediaStatusChangeListener(listener: MediaStatusChangeListener) {
+            mMediaStatusChangeListener = listener
+        }
+
         fun play(song: Song?): Boolean {
+            println("---SongBinder---play--$song")
+            mMediaStatusChangeListener?.onPlay(song)
             mCurrentSong = song
-            println("---SongBinder---play--$mCurrentSong")
             if (mMediaPlayer != null && mCurrentSong != null) {
-                mIsPalying = true
+                mIsPlaying = true
                 mCurrentPlaySongIndex = getSongIndex(mCurrentSong!!)
                 val songUrl = mCurrentSong!!.url
                 if (!TextUtils.isEmpty(songUrl)) {
-                    paueOtherMediaPlayer()
+                    pauseOtherMediaPlayer()
 
                     mMediaPlayer!!.reset()
                     mMediaPlayer!!.setDataSource(songUrl)
@@ -113,7 +120,8 @@ class SongPlayerService : Service() {
 
         fun pause(): Boolean {
             println("---SongBinder---pause--")
-            mIsPalying = false
+            mMediaStatusChangeListener?.onPause(mCurrentSong)
+            mIsPlaying = false
             return if (mMediaPlayer != null) {
                 if (mMediaPlayer!!.isPlaying) {
                     mMediaPlayer!!.pause()
@@ -124,7 +132,7 @@ class SongPlayerService : Service() {
             }
         }
 
-        private fun paueOtherMediaPlayer() {
+        private fun pauseOtherMediaPlayer() {
             if (mAudioManager != null) {
                 mAudioManager!!.requestAudioFocus(
                         mAudioFocusListener,
@@ -134,13 +142,38 @@ class SongPlayerService : Service() {
             }
         }
 
+        fun onContinue(): Boolean {
+            println("---SongBinder---onContinue--")
+            mMediaStatusChangeListener?.onContinue(mCurrentSong)
+            return if (mMediaPlayer != null) {
+                if (mMediaPlayer!!.isPlaying) {
+                    mMediaPlayer!!.start()
+                }
+                mMediaPlayer!!.isPlaying
+            } else {
+                true
+            }
+        }
 
         fun playNext() {
             println("---SongBinder---playNext--")
             mCurrentPlaySongIndex++
-            if (mCurrentPlaySongIndex <= mSongList!!.count()) {
+            if (mCurrentPlaySongIndex > 0 && mCurrentPlaySongIndex <= mSongList!!.count()) {
                 val nextSong = mSongList!![mCurrentPlaySongIndex]
                 play(nextSong)
+                mMediaStatusChangeListener?.playNext(nextSong)
+            } else {
+                pause()
+            }
+        }
+
+        fun playPrevious() {
+            println("---SongBinder---playPrevious--")
+            mCurrentPlaySongIndex--
+            if (mCurrentPlaySongIndex > 0 && mCurrentPlaySongIndex <= mSongList!!.count()) {
+                val nextSong = mSongList!![mCurrentPlaySongIndex]
+                play(nextSong)
+                mMediaStatusChangeListener?.playPrevious(nextSong)
             } else {
                 pause()
             }
@@ -157,13 +190,26 @@ class SongPlayerService : Service() {
             return songIndex
         }
 
+        fun setCurrentSong(song: Song?) {
+            mCurrentSong = song
+        }
+
         fun getCurrentSong(): Song? {
             return mCurrentSong
         }
 
         fun isPlaying(): Boolean {
-            return mIsPalying
+            return mIsPlaying
         }
     }
 
+    interface MediaStatusChangeListener {
+        fun onPlay(song: Song?)
+        fun onPause(song: Song?)
+        fun playNext(song: Song?)
+        fun playPrevious(song: Song?)
+        fun onContinue(song: Song?)
+        fun onProgress(totalDuration: Int, currentDuration: Int)
+        fun onError(exception: Exception)
+    }
 }

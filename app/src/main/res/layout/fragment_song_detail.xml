@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,6 +58,23 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_song_name"
             tools:text="演唱者" />
 
+        <ImageView
+            android:id="@+id/iv_operation_previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play_btn_prev_selector"
+            app:layout_constraintEnd_toStartOf="@+id/iv_operation_next"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_song_singer" />
+
+        <ImageView
+            android:id="@+id/iv_operation_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play_btn_nest_selector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_operation_previous"
+            app:layout_constraintTop_toTopOf="@+id/iv_operation_previous" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
