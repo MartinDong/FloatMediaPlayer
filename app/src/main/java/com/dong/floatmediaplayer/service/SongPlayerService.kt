@@ -38,7 +38,7 @@ class SongPlayerService : Service() {
         mAudioFocusListener = AudioManager.OnAudioFocusChangeListener {
             println("---OnAudioFocusChangeListener---$it")
             if (it != AudioManager.AUDIOFOCUS_GAIN) {
-                mSongBinder!!.pause()
+                mSongBinder!!.pauseWithLossFocus()
             } else {
                 mSongBinder!!.onContinue()
             }
@@ -165,6 +165,7 @@ class SongPlayerService : Service() {
                     return true
                 } else {
                     pause()
+
                     return false
                 }
             }
@@ -174,6 +175,19 @@ class SongPlayerService : Service() {
         fun pause(): Boolean {
             println("---SongBinder---pause--")
             mIsPlaying = false
+            statusOnPause(mCurrentSong)
+            return if (mMediaPlayer != null) {
+                if (mMediaPlayer!!.isPlaying) {
+                    mMediaPlayer!!.pause()
+                }
+                mMediaPlayer!!.isPlaying
+            } else {
+                true
+            }
+        }
+
+        fun pauseWithLossFocus(): Boolean {
+            println("---SongBinder---pauseWithLossFocus--")
             statusOnPause(mCurrentSong)
             return if (mMediaPlayer != null) {
                 if (mMediaPlayer!!.isPlaying) {
@@ -199,7 +213,7 @@ class SongPlayerService : Service() {
             println("---SongBinder---onContinue--")
             statusOnContinue(mCurrentSong)
             return if (mMediaPlayer != null) {
-                if (!mMediaPlayer!!.isPlaying) {
+                if (!mMediaPlayer!!.isPlaying && isPlaying()) {
                     mMediaPlayer!!.start()
                 }
                 mMediaPlayer!!.isPlaying
