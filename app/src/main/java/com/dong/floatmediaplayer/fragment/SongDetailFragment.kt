@@ -165,7 +165,7 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
 
                 }
 
-                override fun onContinue(song: Song?) {
+                override fun onContinuePlay(song: Song?) {
                 }
 
                 override fun onProgress(totalDuration: Int, currentDuration: Int) {

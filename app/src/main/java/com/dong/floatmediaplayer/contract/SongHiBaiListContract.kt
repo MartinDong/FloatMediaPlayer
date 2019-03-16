@@ -12,7 +12,8 @@ interface SongHiBaiListContract {
 
     interface View : BaseView {
         fun onPlaySong(song: Song)
-        fun pauseSong(song: Song)
+        fun onPauseSong(song: Song)
+        fun continuePlay(song: Song)
         fun onSuccess(message: Any)
     }
 

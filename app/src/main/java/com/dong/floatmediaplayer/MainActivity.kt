@@ -49,7 +49,7 @@ class MainActivity : BaseActivity(), MainContract.View {
     }
 
     override fun pauseSong(song: Song) {
-        println("------pauseSong------=$song")
+        println("------onPauseSong------=$song")
     }
 
     override fun showLoading() {

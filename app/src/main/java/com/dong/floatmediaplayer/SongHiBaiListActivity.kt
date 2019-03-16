@@ -33,6 +33,10 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
     override fun initView() {
         println("------initView------")
         mSongListAdapter = SongHiBaiListAdapter(mSongList, object : SongHiBaiListAdapter.OperationListener {
+            override fun continuePlay(song: Song) {
+
+            }
+
             override fun jumDetail(song: Song) {
 
             }
@@ -71,15 +75,25 @@ class SongHiBaiListActivity : BaseMvpActivity<SongHiBaiListPresenter>(), SongHiB
 
     override fun onPlaySong(song: Song) {
         println("------onPlaySong------$song")
-
         if (mSongBinder != null) {
             mSongBinder!!.play(song)
         }
     }
 
-    override fun pauseSong(song: Song) {
-        println("------pauseSong------=$song")
+    override fun onPauseSong(song: Song) {
+        println("------onPauseSong------$song")
+        if (mSongBinder != null) {
+            mSongBinder!!.pause()
+        }
     }
+
+    override fun continuePlay(song: Song) {
+        println("------continuePlay------$song")
+        if (mSongBinder != null) {
+            mSongBinder!!.continuePlay()
+        }
+    }
+
 
     override fun showLoading() {
         println("------showLoading------")

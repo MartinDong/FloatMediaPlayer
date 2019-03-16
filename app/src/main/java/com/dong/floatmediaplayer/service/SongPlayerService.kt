@@ -41,7 +41,7 @@ class SongPlayerService : Service() {
                 mSongBinder!!.pauseWithLossFocus()
             }
 //            else {
-//                mSongBinder!!.onContinue()
+//                mSongBinder!!.continuePlay()
 //            }
         }
     }
@@ -118,7 +118,7 @@ class SongPlayerService : Service() {
 
         fun statusOnContinue(song: Song?) {
             mStatusListeners?.forEach {
-                it.onContinue(song)
+                it.onContinuePlay(song)
             }
         }
 
@@ -210,8 +210,8 @@ class SongPlayerService : Service() {
             }
         }
 
-        fun onContinue(): Boolean {
-            println("---SongBinder---onContinue--")
+        fun continuePlay(): Boolean {
+            println("---SongBinder---continuePlay--")
             statusOnContinue(mCurrentSong)
             return if (mMediaPlayer != null) {
                 if (!mMediaPlayer!!.isPlaying && isPlaying()) {
@@ -276,7 +276,7 @@ class SongPlayerService : Service() {
         fun onPause(song: Song?)
         fun onPlayNext(song: Song?)
         fun onPlayPrevious(song: Song?)
-        fun onContinue(song: Song?)
+        fun onContinuePlay(song: Song?)
         fun onProgress(totalDuration: Int, currentDuration: Int)
         fun onError(exception: Exception)
     }
