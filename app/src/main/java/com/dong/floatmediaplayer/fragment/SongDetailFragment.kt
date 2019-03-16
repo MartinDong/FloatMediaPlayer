@@ -22,6 +22,8 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
     private var mSongBinder: SongPlayerService.SongBinder? = null
     private var mSongServiceConnection: SongServiceConnection? = null
 
+    private var mMediaStatusChangeListener: SongPlayerService.MediaStatusChangeListener? = null
+
     fun setSong(song: Song) {
         mSong = song
     }
@@ -44,7 +46,7 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
         if (mSongServiceConnection != null) {
             unbindService(mSongServiceConnection!!)
         }
-        mSongBinder = null
+        mSongBinder?.removeMediaStatusChangeListener(mMediaStatusChangeListener)
         super.onDetach()
     }
 
@@ -92,18 +94,20 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
 
     private fun initSongStatus(song: Song?) {
         if (mSongBinder != null && song != null) {
-            if (mSong.id == song.id) {
-                if (mSongBinder!!.isPlaying()) {
-                    Glide.with(this)
-                        .load(R.drawable.widget_pause_selector)
-                        .centerCrop()
-                        .into(iv_operation)
-                } else {
-                    Glide.with(this)
-                        .load(R.drawable.widget_play_selector)
-                        .centerCrop()
-                        .into(iv_operation)
-                }
+            if (mSongBinder!!.isPlaying()) {
+                println("------initSongStatus--当前处于播放----$song")
+
+                Glide.with(this)
+                    .load(R.drawable.widget_pause_selector)
+                    .centerCrop()
+                    .into(iv_operation)
+            } else {
+                println("------initSongStatus--当前处于暂停----$song")
+
+                Glide.with(this)
+                    .load(R.drawable.widget_play_selector)
+                    .centerCrop()
+                    .into(iv_operation)
             }
         }
     }
@@ -141,7 +145,8 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
             println("------onServiceConnected------$name")
             mSongBinder = service as SongPlayerService.SongBinder
             mSongBinder!!.setCurrentSong(mSong)
-            mSongBinder!!.setMediaStatusChangeListener(object : SongPlayerService.MediaStatusChangeListener {
+
+            mMediaStatusChangeListener = object : SongPlayerService.MediaStatusChangeListener {
                 override fun onPlay(song: Song?) {
                     mCurrentPlaySong = song
                     initSongStatus(song)
@@ -149,14 +154,14 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
                 }
 
                 override fun onPause(song: Song?) {
+                    initSongStatus(song)
+                }
+
+                override fun onPlayNext(song: Song?) {
 
                 }
 
-                override fun playNext(song: Song?) {
-
-                }
-
-                override fun playPrevious(song: Song?) {
+                override fun onPlayPrevious(song: Song?) {
 
                 }
 
@@ -170,8 +175,9 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
                 override fun onError(exception: Exception) {
 
                 }
+            }
 
-            })
+            mSongBinder!!.addMediaStatusChangeListener(mMediaStatusChangeListener)
             mCurrentPlaySong = mSongBinder!!.getCurrentSong()
             initSongStatus(mCurrentPlaySong)
         }

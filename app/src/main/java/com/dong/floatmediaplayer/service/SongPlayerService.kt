@@ -24,22 +24,21 @@ class SongPlayerService : Service() {
 
     private var mIsPlaying = false
 
-    private var mMediaStatusChangeListener: MediaStatusChangeListener? = null
+    private var mStatusListeners: MutableList<MediaStatusChangeListener>? = null
 
     override fun onCreate() {
         println("---初始化音乐播放服务---onCreate")
         super.onCreate()
         mSongList = mutableListOf()
         mMediaPlayer = MediaPlayer()
+        mStatusListeners = mutableListOf()
         mSongBinder = SongBinder()
         mAudioManager = SongApplication.getApplication()?.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
 
         mAudioFocusListener = AudioManager.OnAudioFocusChangeListener {
             println("---OnAudioFocusChangeListener---$it")
-            if (it == AudioManager.AUDIOFOCUS_LOSS) {
+            if (it != AudioManager.AUDIOFOCUS_GAIN) {
                 mSongBinder!!.pause()
-            } else if (it == AudioManager.AUDIOFOCUS_GAIN) {
-                mSongBinder!!.play(mCurrentSong)
             }
         }
     }
@@ -56,7 +55,6 @@ class SongPlayerService : Service() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         println("---音乐播放服务解綁---onUnbind")
-        mMediaStatusChangeListener = null
         return super.onUnbind(intent)
     }
 
@@ -77,13 +75,64 @@ class SongPlayerService : Service() {
             mSongList = songList
         }
 
-        fun setMediaStatusChangeListener(listener: MediaStatusChangeListener) {
-            mMediaStatusChangeListener = listener
+        fun addMediaStatusChangeListener(listener: MediaStatusChangeListener?) {
+            if (listener != null)
+                mStatusListeners?.add(listener)
+        }
+
+        fun removeMediaStatusChangeListener(listener: MediaStatusChangeListener?) {
+            if (listener != null)
+                mStatusListeners?.remove(listener)
+        }
+
+        fun clearMediaStatusChangeListener() {
+            mStatusListeners?.clear()
+        }
+
+        fun statusOnPlay(song: Song?) {
+            mStatusListeners?.forEach {
+                it.onPlay(song)
+            }
+        }
+
+        fun statusOnPause(song: Song?) {
+            mStatusListeners?.forEach {
+                it.onPause(song)
+            }
+        }
+
+        fun statusOnPlayNext(song: Song?) {
+            mStatusListeners?.forEach {
+                it.onPlayNext(song)
+            }
+        }
+
+        fun statusOnPlayPrevious(song: Song?) {
+            mStatusListeners?.forEach {
+                it.onPlayPrevious(song)
+            }
+        }
+
+        fun statusOnContinue(song: Song?) {
+            mStatusListeners?.forEach {
+                it.onContinue(song)
+            }
+        }
+
+        fun statusOnProgress(totalDuration: Int, currentDuration: Int) {
+            mStatusListeners?.forEach {
+                it.onProgress(totalDuration, currentDuration)
+            }
+        }
+
+        fun statusOnError(exception: Exception) {
+            mStatusListeners?.forEach {
+                it.onError(exception)
+            }
         }
 
         fun play(song: Song?): Boolean {
             println("---SongBinder---play--$song")
-            mMediaStatusChangeListener?.onPlay(song)
             mCurrentSong = song
             if (mMediaPlayer != null && mCurrentSong != null) {
                 mIsPlaying = true
@@ -110,6 +159,7 @@ class SongPlayerService : Service() {
                             pause()
                         }
                     }
+                    statusOnPlay(song)
                     return true
                 } else {
                     pause()
@@ -121,8 +171,8 @@ class SongPlayerService : Service() {
 
         fun pause(): Boolean {
             println("---SongBinder---pause--")
-            mMediaStatusChangeListener?.onPause(mCurrentSong)
             mIsPlaying = false
+            statusOnPause(mCurrentSong)
             return if (mMediaPlayer != null) {
                 if (mMediaPlayer!!.isPlaying) {
                     mMediaPlayer!!.pause()
@@ -136,16 +186,16 @@ class SongPlayerService : Service() {
         private fun pauseOtherMediaPlayer() {
             if (mAudioManager != null) {
                 mAudioManager!!.requestAudioFocus(
-                        mAudioFocusListener,
-                        AudioManager.STREAM_MUSIC,
-                        AudioManager.AUDIOFOCUS_GAIN
+                    mAudioFocusListener,
+                    AudioManager.STREAM_MUSIC,
+                    AudioManager.AUDIOFOCUS_GAIN
                 )
             }
         }
 
         fun onContinue(): Boolean {
             println("---SongBinder---onContinue--")
-            mMediaStatusChangeListener?.onContinue(mCurrentSong)
+            statusOnContinue(mCurrentSong)
             return if (mMediaPlayer != null) {
                 if (mMediaPlayer!!.isPlaying) {
                     mMediaPlayer!!.start()
@@ -157,24 +207,24 @@ class SongPlayerService : Service() {
         }
 
         fun playNext() {
-            println("---SongBinder---playNext--")
+            println("---SongBinder---onPlayNext--")
             mCurrentPlaySongIndex++
             if (mCurrentPlaySongIndex > 0 && mCurrentPlaySongIndex <= mSongList!!.count()) {
                 val nextSong = mSongList!![mCurrentPlaySongIndex]
                 play(nextSong)
-                mMediaStatusChangeListener?.playNext(nextSong)
+                statusOnPlayNext(nextSong)
             } else {
                 pause()
             }
         }
 
         fun playPrevious() {
-            println("---SongBinder---playPrevious--")
+            println("---SongBinder---onPlayPrevious--")
             mCurrentPlaySongIndex--
             if (mCurrentPlaySongIndex > 0 && mCurrentPlaySongIndex <= mSongList!!.count()) {
                 val nextSong = mSongList!![mCurrentPlaySongIndex]
                 play(nextSong)
-                mMediaStatusChangeListener?.playPrevious(nextSong)
+                statusOnPlayPrevious(nextSong)
             } else {
                 pause()
             }
@@ -207,8 +257,8 @@ class SongPlayerService : Service() {
     interface MediaStatusChangeListener {
         fun onPlay(song: Song?)
         fun onPause(song: Song?)
-        fun playNext(song: Song?)
-        fun playPrevious(song: Song?)
+        fun onPlayNext(song: Song?)
+        fun onPlayPrevious(song: Song?)
         fun onContinue(song: Song?)
         fun onProgress(totalDuration: Int, currentDuration: Int)
         fun onError(exception: Exception)
