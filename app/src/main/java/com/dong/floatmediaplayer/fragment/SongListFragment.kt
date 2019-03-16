@@ -62,12 +62,12 @@ class SongListFragment : BaseMvpFragment<SongHiBaiListPresenter>(), SongHiBaiLis
         bindService(songServiceIntent, mSongServiceConnection!!, AppCompatActivity.BIND_AUTO_CREATE)
     }
 
-    override fun onDestroy() {
-        println("------onDestroy------")
-        super.onDestroy()
+    override fun onDetach() {
+        println("------onDetach------")
         if (mSongServiceConnection != null) {
             unbindService(mSongServiceConnection!!)
         }
+        super.onDetach()
     }
 
     override fun onPlaySong(song: Song) {

@@ -39,12 +39,13 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
         showSongDetail(mSong)
     }
 
-    override fun onDestroy() {
-        println("------onDestroy------")
-        super.onDestroy()
+    override fun onDetach() {
+        println("------onDetach------")
         if (mSongServiceConnection != null) {
             unbindService(mSongServiceConnection!!)
         }
+        mSongBinder = null
+        super.onDetach()
     }
 
     override fun showLoading() {
@@ -61,9 +62,9 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
 
     override fun showSongDetail(song: Song) {
         Glide.with(this)
-                .load(song.pic)
-                .centerCrop()
-                .into(iv_song_pic)
+            .load(song.pic)
+            .centerCrop()
+            .into(iv_song_pic)
 
         tv_song_name.text = song.name
         tv_song_singer.text = song.singer
@@ -94,14 +95,14 @@ class SongDetailFragment : BaseMvpFragment<SongDetailPresenter>(), SongDetailCon
             if (mSong.id == song.id) {
                 if (mSongBinder!!.isPlaying()) {
                     Glide.with(this)
-                            .load(R.drawable.widget_pause_selector)
-                            .centerCrop()
-                            .into(iv_operation)
+                        .load(R.drawable.widget_pause_selector)
+                        .centerCrop()
+                        .into(iv_operation)
                 } else {
                     Glide.with(this)
-                            .load(R.drawable.widget_play_selector)
-                            .centerCrop()
-                            .into(iv_operation)
+                        .load(R.drawable.widget_play_selector)
+                        .centerCrop()
+                        .into(iv_operation)
                 }
             }
         }

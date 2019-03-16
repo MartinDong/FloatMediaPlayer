@@ -56,6 +56,7 @@ class SongPlayerService : Service() {
 
     override fun onUnbind(intent: Intent?): Boolean {
         println("---音乐播放服务解綁---onUnbind")
+        mMediaStatusChangeListener = null
         return super.onUnbind(intent)
     }
 
