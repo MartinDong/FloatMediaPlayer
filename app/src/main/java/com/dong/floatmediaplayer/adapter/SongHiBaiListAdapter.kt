@@ -104,7 +104,24 @@ class SongHiBaiListAdapter(private var songList: List<Song>, private var operati
                 setSong(song)
             }
             itemView.setOnClickListener {
-                operationListener.jumDetail(song)
+                if (mSong == null) {
+                    mIsPlaying = true
+                    operationListener.playSong(song)
+                } else {
+                    if (mIsPlaying) {
+                        mIsPlaying = true
+                        operationListener.playSong(song)
+                    } else {
+                        if (mSong?.id != song.id) {
+                            mIsPlaying = true
+                            operationListener.playSong(song)
+                        } else {
+                            mIsPlaying = true
+                            operationListener.continuePlay(song)
+                        }
+                    }
+                }
+                setSong(song)
             }
         }
     }

@@ -37,14 +37,9 @@ class SongListFragment : BaseMvpFragment<SongHiBaiListPresenter>(), SongHiBaiLis
             }
 
             override fun jumDetail(song: Song) {
-                val currentSong = mSongBinder!!.getCurrentSong()
-                if (currentSong?.id == song.id) {
-                    val mSongDetailFra = SongDetailFragment()
-                    mSongDetailFra.setSong(song)
-                    startFragment(R.id.content_fragment, mSongDetailFra)
-                } else {
-                    onPlaySong(song)
-                }
+                val mSongDetailFra = SongDetailFragment()
+                mSongDetailFra.setSong(song)
+                startFragment(R.id.content_fragment, mSongDetailFra)
             }
 
             override fun playSong(song: Song) {
