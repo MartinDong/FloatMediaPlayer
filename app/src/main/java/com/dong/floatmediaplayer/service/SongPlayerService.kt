@@ -39,6 +39,8 @@ class SongPlayerService : Service() {
             println("---OnAudioFocusChangeListener---$it")
             if (it != AudioManager.AUDIOFOCUS_GAIN) {
                 mSongBinder!!.pause()
+            } else {
+                mSongBinder!!.onContinue()
             }
         }
     }
@@ -139,7 +141,7 @@ class SongPlayerService : Service() {
                 mCurrentPlaySongIndex = getSongIndex(mCurrentSong!!)
                 val songUrl = mCurrentSong!!.url
                 if (!TextUtils.isEmpty(songUrl)) {
-                    pauseOtherMediaPlayer()
+                    requestAudioFocus()
 
                     mMediaPlayer!!.reset()
                     mMediaPlayer!!.setDataSource(songUrl)
@@ -183,7 +185,7 @@ class SongPlayerService : Service() {
             }
         }
 
-        private fun pauseOtherMediaPlayer() {
+        private fun requestAudioFocus() {
             if (mAudioManager != null) {
                 mAudioManager!!.requestAudioFocus(
                     mAudioFocusListener,
@@ -197,7 +199,7 @@ class SongPlayerService : Service() {
             println("---SongBinder---onContinue--")
             statusOnContinue(mCurrentSong)
             return if (mMediaPlayer != null) {
-                if (mMediaPlayer!!.isPlaying) {
+                if (!mMediaPlayer!!.isPlaying) {
                     mMediaPlayer!!.start()
                 }
                 mMediaPlayer!!.isPlaying
