@@ -39,9 +39,10 @@ class SongPlayerService : Service() {
             println("---OnAudioFocusChangeListener---$it")
             if (it != AudioManager.AUDIOFOCUS_GAIN) {
                 mSongBinder!!.pauseWithLossFocus()
-            } else {
-                mSongBinder!!.onContinue()
             }
+//            else {
+//                mSongBinder!!.onContinue()
+//            }
         }
     }
 
