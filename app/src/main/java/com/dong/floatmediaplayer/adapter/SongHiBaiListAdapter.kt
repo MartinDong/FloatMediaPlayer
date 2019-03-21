@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.dong.floatmediaplayer.R
 import com.dong.floatmediaplayer.bean.wangyi.Song
 
+
 class SongHiBaiListAdapter(private var songList: List<Song>, private var operationListener: OperationListener) :
     RecyclerView.Adapter<SongHiBaiListAdapter.SongHiBaiHV>() {
 
