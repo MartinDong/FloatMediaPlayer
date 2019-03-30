@@ -110,14 +110,16 @@ class SongHiBaiListAdapter(private var songList: List<Song>, private var operati
                     operationListener.playSong(song)
                 } else {
                     if (mIsPlaying) {
-                        mIsPlaying = true
-                        operationListener.playSong(song)
-                    } else {
                         if (mSong?.id != song.id) {
-                            mIsPlaying = true
                             operationListener.playSong(song)
                         } else {
-                            mIsPlaying = true
+                            operationListener.jumDetail(song)
+                        }
+                    } else {
+                        mIsPlaying = true
+                        if (mSong?.id != song.id) {
+                            operationListener.playSong(song)
+                        } else {
                             operationListener.continuePlay(song)
                         }
                     }
